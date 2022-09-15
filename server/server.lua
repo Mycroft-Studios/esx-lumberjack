@@ -110,4 +110,3 @@ RegisterServerEvent('esx-lumberjack:lumberprocessed', function()
         return false
     end
 end)
-
