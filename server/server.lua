@@ -6,13 +6,17 @@ RegisterNetEvent('esx-lumberjack:sellItems', function()
     local xPlayer = ESX.GetPlayerFromId(source)
     for k,v in pairs(Config.Sell) do 
         local item = xPlayer.getInventoryItem(k)
-        if item.count >= 1 then
-            price = price + (v.price * item.count)
+        if item and item.count >= 1 then
+            price = price + (v * item.count)
             xPlayer.removeInventoryItem(k, item.count)
         end
     end
-    xPlayer.addMoney(price)
-    xPlayer.showNotification(Config.Alerts["successfully_sold"], true, false, 140)
+    if price > 0 then
+        xPlayer.addMoney(price)
+        xPlayer.showNotification(Config.Alerts["successfully_sold"], true, false, 140)
+    else
+        xPlayer.showNotification(Config.Alerts["no_item"])
+    end
 end)
 
 RegisterNetEvent('esx-lumberjack:BuyAxe', function()
@@ -32,7 +36,7 @@ end)
 ESX.RegisterServerCallback('esx-lumberjack:axe', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
     if xPlayer then
-        if xPlayer.getInventoryItem("weapon_battleaxe").count >= 1 then
+        if xPlayer.hasWeapon('WEAPON_BATTLEAXE') then
             cb(true)
         else
             cb(false)
@@ -106,5 +110,3 @@ RegisterServerEvent('esx-lumberjack:lumberprocessed', function()
         return false
     end
 end)
-
-

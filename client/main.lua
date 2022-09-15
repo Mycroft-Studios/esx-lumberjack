@@ -1,4 +1,7 @@
 local chopping = false
+local LumberDepo = Config.Blips.LumberDepo
+local LumberProcessor = Config.Blips.LumberProcessor
+local LumberSeller = Config.Blips.LumberSeller
 
 RegisterNetEvent('esx-lumberjack:getLumberStage', function(stage, state, k)
     Config.TreeLocations[k][stage] = state
@@ -285,7 +288,7 @@ RegisterNetEvent('esx-lumberjack:vehicle', function()
         local JobVehicle = CreateVehicle(vehicle, coords, 45.0, true, false)
         SetVehicleHasBeenOwnedByPlayer(JobVehicle,  true)
         SetEntityAsMissionEntity(JobVehicle,  true,  true)
-        exports['LegacyFuel']:SetFuel(JobVehicle, 100.0)
+        Config.FuelSystem(JobVehicle, 100.0)
         local id = NetworkGetNetworkIdFromEntity(JobVehicle)
         DoScreenFadeOut(1500)
         Wait(1500)
