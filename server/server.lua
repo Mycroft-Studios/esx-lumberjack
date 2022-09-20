@@ -110,21 +110,3 @@ RegisterServerEvent('esx-lumberjack:lumberprocessed', function()
         return false
     end
 end)
-
-AddEventHandler('onResourceStart', function(resourceName)
-    if (GetCurrentResourceName() ~= resourceName) then
-        return
-    end
-    print("-------------------------------------------------------------------------------------------------------------")
-    print("███████╗ ██████╗██╗  ██╗ ██╗     ██╗   ██╗███╗   ███╗██████╗ ███████╗██████╗      ██╗ █████╗  █████╗ ██╗  ██╗ ")
-    print("██╔═══  ██╔════╝╚██╗██╔╝ ██║     ██║   ██║████╗ ████║██╔══██╗██╔════╝██╔══██╗     ██║██╔══██╗██╔══██╗██║██╔╝ ")
-    print("█████╗  ╚█████╗  ╚███╔╝  ██║     ██║   ██║██╔████╔██║██████╦╝█████╗  ██████╔╝     ██║███████║██║  ╚═╝█████═╝ ")
-    print("██╔══╝   ╚═══██╗ ██╔██╗  ██║     ██║   ██║██║╚██╔╝██║██╔══██╗██╔══╝  ██╔══██╗██╗  ██║██╔══██║██║  ██╗██╔═██╗ ")
-    print("███████╗██████╔╝██╔╝╚██╗ ███████╗╚██████╔╝██║ ╚═╝ ██║██████╦╝███████╗██║  ██║╚█████╔╝██║  ██║╚█████╔╝██║ ╚██╗")
-    print("╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ")
-    print("              Converted By Mycroft (Manager of ESX-Framework) & Benzo (Head Of ESX-Support)")
-    print("                               Website: https://docs.esx-framework.org")
-    print("                                TRClassic: https://dsc.gg/trclassic")
-    print("                    Original Script: https://github.com/trclassic92/tr-lumberjack")
-    print("---------------------------------------------------------------------------------------------------------------")                                                                                                                                
-  end)

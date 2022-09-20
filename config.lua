@@ -49,7 +49,7 @@ Config.Blips = {
 }}
 
 LumberJob = {
-    LumberModel = `s_m_y_construct_01`,                             -- Ped model  https://wiki.rage.mp/index.php?title=Peds
+    LumberModel = "s_m_y_construct_01",                             -- Ped model  https://wiki.rage.mp/index.php?title=Peds
     LumberHash = 0xD7DA9E99,                                        -- Hash numbers for ped model
     
     ChoppingTreeTimer = 12 * 1000,                                  -- 12 second timer
