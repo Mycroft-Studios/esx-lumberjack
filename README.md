@@ -6,11 +6,6 @@ LumberJack Script for QBCore - Converted to ESX by Mycroft (Manager of ESX-Frame
 
 - [Join Discord](https://discord.esx-framework.org/)
 
-## Donate
-
-- [trclassic Ko-fi Link](https://ko-fi.com/trclassic)
-- [ESX-Framework Ko-fi Link](https://ko-fi.com/esxframework)
-
 ## Original Script
 
 - [tr-lumberjack](https://github.com/trclassic92/tr-lumberjack)
@@ -27,14 +22,12 @@ LumberJack Script for QBCore - Converted to ESX by Mycroft (Manager of ESX-Frame
 - [esx-legacy](https://docs.esx-framework.org)
 - [qtarget](https://github.com/overextended/qtarget/releases)
 - [PolyZone](https://github.com/mkafrin/PolyZone)
-- [mythic_progbar](https://github.com/HalCroves/mythic_progbar)
+- [ox_lib](https://github.com/overextended/ox_lib/releases)
 
 ## Preview Pictures
 
-- [Youtube Video](https://youtu.be/DpmRvZUhPAo)
-![Preview Screenshot](https://i.imgur.com/5ZC9RNo.jpeg)
-![Preview Screenshot](https://i.imgur.com/2D3lOfG.png)
-![Preview Screenshot](https://i.imgur.com/TghLZWz.jpeg)
-![Preview Screenshot](https://i.imgur.com/vtHS9iP.jpeg)
-![Preview Screenshot](https://i.imgur.com/tIWGi16.jpeg)
-![Preview Screenshot](https://i.imgur.com/I3oQ5wi.jpeg)
+![Preview Screenshot](https://i.imgur.com/aqY8o9E.png)
+![Preview Screenshot](https://i.imgur.com/6SHy1q5.png)
+![Preview Screenshot](https://i.imgur.com/qaO7Nih.png)
+![Preview Screenshot](https://i.imgur.com/NxSij99.png)
+![Preview Screenshot](https://i.imgur.com/KTSWeCt.png)

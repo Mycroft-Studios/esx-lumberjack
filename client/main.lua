@@ -325,10 +325,16 @@ RegisterNetEvent('esx-lumberjack:bossmenu', function()
             title = Config.Alerts["vehicle_header"],
             options = {
                 {
-                    title = 'Menu button',
-                    menu = 'other_example_menu',
-                    description = 'Takes you to another menu!',
-                    metadata = {'It also has metadata support'}
+                    title = Config.Alerts["vehicle_text"],
+                    event = 'esx-lumberjack:vehicle',
+                },
+                {
+                    title = Config.Alerts["remove_text"],
+                    event = 'esx-lumberjack:removevehicle',
+                },
+                {
+                    title = Config.Alerts["battleaxe_text"],
+                    event = 'esx-lumberjack:getaxe',
                 },
             },
         })

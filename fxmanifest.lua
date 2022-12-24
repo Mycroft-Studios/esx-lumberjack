@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'TRClassic#0001, Mycroft, Benzo, Gojan#1450'
 description 'LumberJack Job For QB-Core, Converted to ESX, Updated for ox_inventory/ox_lib/esx-legacy'
-version '2.0.2'
+version '2.1.0'
 
 client_scripts {
     '@PolyZone/client.lua',
@@ -23,3 +23,7 @@ shared_scripts {
 }
 
 lua54 'yes'
+
+dependencies {
+    'ox_lib',
+}
