@@ -1,7 +1,12 @@
 Config = Config or {}
-Config.Job = true                                                  -- False = Job is not required / True = Job is required
-Config.UseBlips = true                                              -- True / false option for toggling farm blips
-Config.Timeout = 20 * (60 * 1000)                                   -- 20 minutes
+Config.Job = true -- False = Job is not required / True = Job is required
+Config.UseBlips = true -- True / false option for toggling farm blips
+Config.Timeout = 20 * (60 * 1000) -- 20 minutes
+
+-- Setting of libary
+Config.NotificationType = "ESX" -- ESX, ox_lib
+Config.UseOxLib = true -- If you use Over Extendet Lib then you change it to true from false
+Config.UseOxInventory = true -- if you user ox inventory then you change it to true from false
 
 Config.FuelSystem = function(vehicle, level)
   --  exports['LegacyFuel']:SetFuel(vehicle, level)
@@ -10,18 +15,18 @@ end
 -- Blips
 Config.Blips = {
     LumberDepo = {
-        targetZone = vector3(1167.73, -1347.27, 33.92),                 -- qb-target vector
-        targetHeading = 273.47,                                         -- qb-target box zone
-        coords = vector4(1167.73, -1347.27, 33.92, 273.47),             -- Move Location (Ped and blip)
-        SetBlipSprite = 85,                                             -- Blip Icon (https://docs.fivem.net/docs/game-references/blips/)
-        SetBlipDisplay = 6,                                             -- Blip Behavior (https://docs.fivem.net/natives/?_0x9029B2F3DA924928)
-        SetBlipScale = 0.8,                                            -- Blip Size
-        SetBlipColour = 5,                                              -- Blip Color
-        BlipLabel = "Lumber Depo",                                      -- Blip Label
-        minZ = 31.92,                                                   -- Max Z
-        maxZ = 35.92,                                                   -- Max Z
-        Vehicle = 'tiptruck',                                           -- Job Vehicle
-        VehicleCoords = vector4(1162.27, -1318.55, 34.74, 173.91),      -- Job Vehcile Coords
+        targetZone = vector3(1167.73, -1347.27, 33.92), -- qb-target vector
+        targetHeading = 273.47, -- qb-target box zone
+        coords = vector4(1167.73, -1347.27, 33.92, 273.47), -- Move Location (Ped and blip)
+        SetBlipSprite = 85, -- Blip Icon (https://docs.fivem.net/docs/game-references/blips/)
+        SetBlipDisplay = 6, -- Blip Behavior (https://docs.fivem.net/natives/?_0x9029B2F3DA924928)
+        SetBlipScale = 0.8, -- Blip Size
+        SetBlipColour = 5, -- Blip Color
+        BlipLabel = "Lumber Depo", -- Blip Label
+        minZ = 31.92, -- Max Z
+        maxZ = 35.92, -- Max Z
+        Vehicle = 'tiptruck', -- Job Vehicle
+        VehicleCoords = vector4(1162.27, -1318.55, 34.74, 173.91), -- Job Vehcile Coords
     },
     LumberProcessor = {
         targetZone = vector3(-517.13, 5331.54, 79.26),
@@ -257,42 +262,32 @@ Config.Alerts = {
     lumber_processed_trade = 'You successfully traded ',
     lumber_processed_lumberamount = ' Amount of Lumber for ',
     lumber_processed_received = ' Piles of wooden panks',
-    error_sold = 'You dont have the items to sell here!',
-    successfully_sold = 'You have sold your items',
-    no_item = "You dont have anything to sell",
-
-    axe_check = 'You already have a axe',
-    axe_bought = 'You have bought a axe from the boss for $' ..LumberJob.AxePrice,
-
-    phone_sender = 'Lumber Mill Supervisor',
-    phone_subject = 'Job task',
+    error_sold = 'You have no items for sale here!',
+    successfully_sold = 'You selled a items',
+    no_item = "You do not have any items from the required items",
+    axe_check = 'You already have Axe',
+    axe_bought = 'You just bought an axe for ' ..LumberJob.AxePrice..' $',
+    phone_sender = 'Administrator of Lumber Factory',
+    phone_subject = 'Work tasks',
     phone_message = 'You have been tasked to gather lumber near the paleto bay lumber mill. Once you have finished gathering lumber speak to the mill boss to process the lumber.',
-
-    chopping_tree = 'Chopping Tree',
-
-    Tree_label = 'Start Chopping',
+    chopping_tree = 'Chopping tree',
+    Tree_label = 'Start chop down a tree',
     depo_label = 'Talk to boss',
-    mill_label = 'Talk to mill boss',
-
-    depo_blocked = 'Vehicle blocking depo',
-    depo_stored = 'Job Vehicle Stored',
-
-    vehicle_header = 'Lumber Jack Vehicles',
-    vehicle_get = 'Logger Vehicle',
-    vehicle_text = 'Job Vehicle',
-
-    battleaxe_label = 'Lumber Axe',
-    battleaxe_text = 'Axe used for chopping down trees',
-    
-    vehicle_remove = 'Remove Vehicle',
-    remove_text = 'Remove Job Vehicle',
-
-    lumber_mill = 'Lumber Mill',
+    mill_label = 'Process wood',
+    depo_blocked = 'Some car blocked a depo',
+    depo_stored = 'Vehicle was stored',
+    vehicle_header = '🚛 Lumber Vehicle',
+    vehicle_get = '🚘 Logger Vehicle',
+    vehicle_text = '🚘 Vehicle',
+    battleaxe_label = '🪓 Wooden Axe',
+    battleaxe_text = '💵 Buy wooden axe',  
+    vehicle_remove = '🗑 Delete vehicle',
+    remove_text = '🗑 Delete vehicle',
+    lumber_mill = 'Process of wooden',
     lumber_header = 'Process Lumber',
-    lumber_text = 'Trade for wooden planks',
-
-    Lumber_Seller = 'Sell Lumber',
-
+    lumber_text = '🐻 Process on wooden plank',
+    lumber_text_description = 'Read a description !!! ➡',
+    lumber_text_description_meta_data = 'You need at least 1x Storm Bark and 1x Tree Lumber',
+    Lumber_Seller = 'Seller',
     goback = '< Go Back',
-
 }

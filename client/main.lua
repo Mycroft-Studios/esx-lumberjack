@@ -24,7 +24,15 @@ local function axe()
         end
     end
 
-    ESX.ShowNotification(Config.Alerts["error_axe"])
+    if Config.NotificationType == "ESX" then
+        ESX.ShowNotification(Config.Alerts["error_axe"], "error", 3000)
+    elseif Config.NotificationType == "ox_lib" then
+        lib.notify({
+            description = Config.Alerts["error_axe"],
+            type = "error",
+            duration = 3000,
+        })
+    end
 end
 
 local function ChopLumber(k)
@@ -33,56 +41,37 @@ local function ChopLumber(k)
     local trClassic = PlayerPedId()
     local choptime = LumberJob.ChoppingTreeTimer
     chopping = true
-    FreezeEntityPosition(trClassic, true)
-    TriggerEvent("mythic_progbar:client:progress", {
-        name = "Chopping_Tree",
+
+    local success = lib.progressBar({
         duration = choptime,
         label = Config.Alerts["chopping_tree"],
         useWhileDead = false,
         canCancel = true,
-        controlDisables = {
-            disableMovement = true,
-            disableCarMovement = true,
-            disableMouse = false,
-            disableCombat = true,
+        disable = {
+            car = true,
+            move = true,
+            mouse = false,
+            combat = true
         },
-        animation = {}}, function(status)
-        if not status then
-            TriggerServerEvent('esx-lumberjack:setLumberStage', "isChopped", true, k)
-            TriggerServerEvent('esx-lumberjack:setLumberStage', "isOccupied", false, k)
-            TriggerServerEvent('esx-lumberjack:recivelumber')
-            TriggerServerEvent('esx-lumberjack:setChoppedTimer')
-            chopping = false
-            TaskPlayAnim(trClassic, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
-            FreezeEntityPosition(trClassic, false)
-        else 
-                ClearPedTasks(trClassic)
-                TriggerServerEvent('esx-lumberjack:setLumberStage', "isOccupied", false, k)
-                chopping = false
-                TaskPlayAnim(trClassic, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
-                FreezeEntityPosition(trClassic, false)
-        end
-    end)
-    -- QBCore.Functions.Progressbar("Chopping_Tree", Config.Alerts["chopping_tree"], choptime, false, true, {
-    --     disableMovement = true,
-    --     disableCarMovement = true,
-    --     disableMouse = false,
-    --     disableCombat = true,
-    -- }, {}, {}, {}, function()
-    --     TriggerServerEvent('esx-lumberjack:setLumberStage', "isChopped", true, k)
-    --     TriggerServerEvent('esx-lumberjack:setLumberStage', "isOccupied", false, k)
-    --     TriggerServerEvent('esx-lumberjack:recivelumber')
-    --     TriggerServerEvent('esx-lumberjack:setChoppedTimer')
-    --     chopping = false
-    --     TaskPlayAnim(trClassic, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
-    --     FreezeEntityPosition(trClassic, false)
-    -- end, function()
-    --     ClearPedTasks(trClassic)
-    --     TriggerServerEvent('esx-lumberjack:setLumberStage', "isOccupied", false, k)
-    --     chopping = false
-    --     TaskPlayAnim(trClassic, animDict, "exit", 3.0, 3.0, -1, 2, 0, 0, 0, 0)
-    --     FreezeEntityPosition(trClassic, false)
-    -- end)
+        anim = {
+            dict = 'melee@hatchet@streamed_core',
+            clip = 'plyr_rear_takedown_b'
+        },
+    })
+
+    if success then
+        TriggerServerEvent('esx-lumberjack:setLumberStage', "isChopped", true, k)
+        TriggerServerEvent('esx-lumberjack:setLumberStage', "isOccupied", false, k)
+        TriggerServerEvent('esx-lumberjack:recivelumber')
+        TriggerServerEvent('esx-lumberjack:setChoppedTimer')
+        chopping = false
+        return true
+    else
+        ClearPedTasks(trClassic)
+        TriggerServerEvent('esx-lumberjack:setLumberStage', "isOccupied", false, k)
+        chopping = false
+        return false
+    end
     TriggerServerEvent('esx-lumberjack:setLumberStage', "isOccupied", true, k)
     CreateThread(function()
         while chopping do
@@ -145,12 +134,12 @@ if Config.Job then
         maxZ = LumberDepo.maxZ,
     }, {
         options = {
-        {
-          event = "esx-lumberjack:bossmenu",
-          icon = "Fas Fa-hands",
-          label = Config.Alerts["depo_label"],
-          job = "lumberjack",
-        },
+            {
+                event = "esx-lumberjack:bossmenu",
+                icon = "Fas Fa-hands",
+                label = Config.Alerts["depo_label"],
+                job = "lumberjack",
+            },
         },
         distance = 1.0
     })
@@ -162,12 +151,12 @@ if Config.Job then
         maxZ = LumberProcessor.maxZ,
     }, {
         options = {
-        {
-          event = "esx-lumberjack:processormenu",
-          icon = "Fas Fa-hands",
-          label = Config.Alerts["mill_label"],
-          job = "lumberjack",
-        },
+            {
+                event = "esx-lumberjack:processormenu",
+                icon = "Fas Fa-hands",
+                label = Config.Alerts["mill_label"],
+                job = "lumberjack",
+            },
         },
         distance = 1.0
     })
@@ -179,13 +168,13 @@ if Config.Job then
         maxZ = LumberSeller.maxZ,
     }, {
         options = {
-        {
-          type = "server",
-          event = "esx-lumberjack:sellItems",
-          icon = "fa fa-usd",
-          label = Config.Alerts["Lumber_Seller"],
-          job = "lumberjack",
-        },
+            {
+                type = "server",
+                event = "esx-lumberjack:sellItems",
+                icon = "fa fa-usd",
+                label = Config.Alerts["Lumber_Seller"],
+                job = "lumberjack",
+            },
         },
         distance = 1.0
     })
@@ -296,7 +285,15 @@ RegisterNetEvent('esx-lumberjack:vehicle', function()
         TaskWarpPedIntoVehicle(TR, JobVehicle, -1)
         DoScreenFadeIn(1500)
     else
-        ESX.ShowNotification(Config.Alerts["depo_blocked"], "error")
+        if Config.NotificationType == "ESX" then
+            ESX.ShowNotification(Config.Alerts["depo_blocked"], "error", 3000)
+        elseif Config.NotificationType == "ox_lib" then
+            lib.notify({
+                description = Config.Alerts["depo_blocked"],
+                type = "error",
+                duration = 3000,
+            })
+        end
     end
 end)
 
@@ -305,7 +302,15 @@ RegisterNetEvent('esx-lumberjack:removevehicle', function()
     local vehicle = GetVehiclePedIsIn(TR92,true)
     SetEntityAsMissionEntity(TR92,true)
     DeleteVehicle(vehicle)
-    ESX.ShowNotification(Config.Alerts["depo_stored"])
+    if Config.NotificationType == "ESX" then
+        ESX.ShowNotification(Config.Alerts["depo_stored"], "success", 3000)
+    elseif Config.NotificationType == "ox_lib" then
+        lib.notify({
+            description = Config.Alerts["depo_stored"],
+            type = "success",
+            duration = 3000,
+        })
+    end
 end)
 
 RegisterNetEvent('esx-lumberjack:getaxe', function()
@@ -313,105 +318,131 @@ RegisterNetEvent('esx-lumberjack:getaxe', function()
 end)
 
 RegisterNetEvent('esx-lumberjack:bossmenu', function()
-    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'boss_menu', {
-        title    = Config.Alerts["vehicle_header"],
-        align    = 'top-left',
-        elements = {
-            {label = Config.Alerts["vehicle_text"], event = 'esx-lumberjack:vehicle'},
-            {label = Config.Alerts["remove_text"], event = 'esx-lumberjack:removevehicle'},
-            {label = Config.Alerts["battleaxe_text"], event = 'esx-lumberjack:getaxe'},
-    }}, function(data, menu)
-        TriggerEvent(data.current.event)
-        menu.close()
-    end, function(data, menu)
-        menu.close()
-    end)
+    if Config.UseOxLib then
+        print('kokot')
+        lib.registerContext({
+            id = 'esx-lumberjack:bossmenu',
+            title = Config.Alerts["vehicle_header"],
+            options = {
+                {
+                    title = Config.Alerts["vehicle_text"],
+                    event = 'esx-lumberjack:vehicle',
+                },
+                {
+                    title = Config.Alerts["remove_text"],
+                    event = 'esx-lumberjack:removevehicle',
+                },
+                {
+                    title = Config.Alerts["battleaxe_text"],
+                    event = 'esx-lumberjack:getaxe',
+                },
+            },
+        })
+        lib.showContext('esx-lumberjack:bossmenu')
+    elseif not Config.UseOxLib then
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'boss_menu', {
+            title    = Config.Alerts["vehicle_header"],
+            align    = 'top-left',
+            elements = {
+                {label = Config.Alerts["vehicle_text"], event = 'esx-lumberjack:vehicle'},
+                {label = Config.Alerts["remove_text"], event = 'esx-lumberjack:removevehicle'},
+                {label = Config.Alerts["battleaxe_text"], event = 'esx-lumberjack:getaxe'},
+        }}, function(data, menu)
+            TriggerEvent(data.current.event)
+            menu.close()
+        end, function(data, menu)
+            menu.close()
+        end)
+    end
 end)
 
 RegisterNetEvent('esx-lumberjack:processormenu', function()
-    ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'boss_menu', {
-        title    = Config.Alerts["lumber_mill"],
-        align    = 'top-left',
-        elements = {
-            {label = Config.Alerts["lumber_text"], event = 'esx-lumberjack:processor'},
-            {label = Config.Alerts["remove_text"], event = 'esx-lumberjack:removevehicle'},
-            {label = Config.Alerts["battleaxe_text"], event = 'esx-lumberjack:getaxe'},
-    }}, function(data, menu)
-        TriggerEvent(data.current.event)
-        menu.close()
-    end, function(data, menu)
-        menu.close()
-    end)
+    if Config.UseOxLib then
+        print('Server using Ox Lib')
+        lib.registerContext({
+            id = 'esx-lumberjack:processormenu',
+            title = Config.Alerts["lumber_mill"],
+            options = {
+                {
+                    title = Config.Alerts["lumber_text"],
+                    event = 'esx-lumberjack:processor',
+                    description = Config.Alerts["lumber_text_description"],
+                    metadata = {Config.Alerts["lumber_text_description_meta_data"]},
+                },
+                {
+                    title = Config.Alerts["remove_text"],
+                    event = 'esx-lumberjack:removevehicle'
+                },
+                {
+                    title = Config.Alerts["battleaxe_text"],
+                    event = 'esx-lumberjack:getaxe'
+                },
+            },
+        })
+        lib.showContext('esx-lumberjack:processormenu')
+    elseif not Config.UseOxLib then
+        print('Server not using Ox Lib')
+        ESX.UI.Menu.Open('default', GetCurrentResourceName(), 'boss_menu', {
+            title    = Config.Alerts["lumber_mill"],
+            align    = 'top-left',
+            elements = {
+                {label = Config.Alerts["lumber_text"], event = 'esx-lumberjack:processor'},
+                {label = Config.Alerts["remove_text"], event = 'esx-lumberjack:removevehicle'},
+                {label = Config.Alerts["battleaxe_text"], event = 'esx-lumberjack:getaxe'},
+        }}, function(data, menu)
+            TriggerEvent(data.current.event)
+            menu.close()
+        end, function(data, menu)
+            menu.close()
+        end)
+    end
 end)
 
 RegisterNetEvent('esx-lumberjack:processor', function()
     ESX.TriggerServerCallback('esx-lumberjack:lumber', function(lumber)
-      if lumber then
-        --[[
-        TriggerEvent("mythic_progbar:client:progress", {
-        name = "unique_action_name",
-        duration = 10000,
-        label = "Action Label",
-        useWhileDead = false,
-        canCancel = true,
-        controlDisables = {
-            disableMovement = true,
-            disableCarMovement = true,
-            disableMouse = false,
-            disableCombat = true,
-        },
-        animation = {
-            animDict = "missheistdockssetup1clipboard@idle_a",
-            anim = "idle_a",
-        },
-        prop = {
-            model = "prop_paper_bag_small",
-        }
-    }, function(status)
-        if not status then
-            -- Do Something If Event Wasn't Cancelled
+        if lumber then
+            local success = lib.progressBar({
+                duration = LumberJob.ProcessingTime,
+                label = Config.Alerts['lumber_progressbar'],
+                useWhileDead = false,
+                canCancel = true,
+                disable = {
+                    car = true,
+                    move = true,
+                    mouse = false,
+                    combat = true
+                },
+                anim = {
+                    dict = 'missheistdockssetup1clipboard@idle_a',
+                    clip = 'idle_a'
+                },
+            })
+        
+            if success then
+                TriggerServerEvent("esx-lumberjack:lumberprocessed")
+                return true
+            else
+                if Config.NotificationType == "ESX" then
+                    ESX.ShowNotification(Config.Alerts['cancel'], "error", 3000)
+                elseif Config.NotificationType == "ox_lib" then
+                    lib.notify({
+                        description = Config.Alerts['cancel'],
+                        type = "error",
+                        duration = 3000,
+                    })
+                end
+                return false
+            end
+        else
+            if Config.NotificationType == "ESX" then
+                ESX.ShowNotification(Config.Alerts['error_lumber'], "error", 3000)
+            elseif Config.NotificationType == "ox_lib" then
+                lib.notify({
+                    description = Config.Alerts['error_lumber'],
+                    type = "error",
+                    duration = 3000,
+                })
+            end
         end
     end)
-        ]]
-        TriggerEvent("mythic_progbar:client:progress", {
-            name = "lumber_trader",
-            duration = LumberJob.ProcessingTime,
-            label = Config.Alerts['lumber_progressbar'],
-            useWhileDead = false,
-            canCancel = true,
-            controlDisables = {
-                disableMovement = true,
-                disableCarMovement = true,
-                disableMouse = false,
-                disableCombat = true,
-            },
-            animation = {
-                animDict = "missheistdockssetup1clipboard@idle_a",
-                anim = "idle_a",
-            },
-            prop = {
-                model = "prop_paper_bag_small",
-            }
-        }, function(status)
-            if not status then
-                TriggerServerEvent("esx-lumberjack:lumberprocessed")
-            else 
-                ESX.ShowNotification(Config.Alerts['cancel'])
-            end
-        end)
-    --     QBCore.Functions.Progressbar('lumber_trader', Config.Alerts['lumber_progressbar'], LumberJob.ProcessingTime , false, true, {
-    --     disableMovement = true,
-    --     disableCarMovement = true,
-    --     disableMouse = false,
-    --     disableCombat = true,
-    --     }, {}, {}, {}, function()    
-    --         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-    --         TriggerServerEvent("esx-lumberjack:lumberprocessed")
-    --     end, function() 
-    --       ESX.ShowNotification(Config.Alerts['cancel'])
-    --     end)
-    else
-         ESX.ShowNotification(Config.Alerts['error_lumber'])
-    end
-    end)
-  end)
+end)

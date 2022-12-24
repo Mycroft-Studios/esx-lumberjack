@@ -13,9 +13,17 @@ RegisterNetEvent('esx-lumberjack:sellItems', function()
     end
     if price > 0 then
         xPlayer.addMoney(price)
-        xPlayer.showNotification(Config.Alerts["successfully_sold"], true, false, 140)
+        if Config.NotificationType == "ESX" then
+            TriggerClientEvent('esx:showNotification', source, Config.Alerts["successfully_sold"], "success")
+        elseif Config.NotificationType == "ox_lib" then
+            TriggerClientEvent('ox_lib:notify', source, { type = 'success', description = Config.Alerts["successfully_sold"] })
+        end
     else
-        xPlayer.showNotification(Config.Alerts["no_item"])
+        if Config.NotificationType == "ESX" then
+            TriggerClientEvent('esx:showNotification', source, Config.Alerts["no_item"], "error")
+        elseif Config.NotificationType == "ox_lib" then
+            TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = Config.Alerts["no_item"] })
+        end
     end
 end)
 
@@ -23,23 +31,45 @@ RegisterNetEvent('esx-lumberjack:BuyAxe', function()
     local source = source
     local xPlayer = ESX.GetPlayerFromId(source)
     local TRAxeClassicPrice = LumberJob.AxePrice
-    local axe = xPlayer.hasWeapon('WEAPON_BATTLEAXE')
-    if not axe then
-        xPlayer.addWeapon('WEAPON_BATTLEAXE', ammo)
-        xPlayer.removeMoney("cash", TRAxeClassicPrice)
-        xPlayer.showNotification(Config.Alerts["axe_bought"], true, false, 140)
-    elseif axe then
-        xPlayer.showNotification(Config.Alerts["axe_check"], true, false, 140)
+    local axe = xPlayer.getInventoryItem('WEAPON_BATTLEAXE')
+    if axe.count >= 1 then
+        if Config.NotificationType == "ESX" then
+            TriggerClientEvent('esx:showNotification', source, Config.Alerts["axe_check"], "error")
+        elseif Config.NotificationType == "ox_lib" then
+            TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = Config.Alerts["axe_check"] })
+        end
+        return false
+    else
+        if Config.UseOxInventory then
+            xPlayer.addInventoryItem('WEAPON_BATTLEAXE', 1)
+        else
+            xPlayer.addWeapon('WEAPON_BATTLEAXE', 1)
+        end
+        xPlayer.removeMoney(LumberJob.AxePrice)
+        if Config.NotificationType == "ESX" then
+            TriggerClientEvent('esx:showNotification', source, Config.Alerts["axe_bought"], "success")
+        elseif Config.NotificationType == "ox_lib" then
+            TriggerClientEvent('ox_lib:notify', source, { type = 'success', description = Config.Alerts["axe_bought"] })
+        end
+        return true
     end
 end)
 
 ESX.RegisterServerCallback('esx-lumberjack:axe', function(source, cb)
     local xPlayer = ESX.GetPlayerFromId(source)
     if xPlayer then
-        if xPlayer.hasWeapon('WEAPON_BATTLEAXE') then
-            cb(true)
+        if Config.UseOxInventory then
+            if xPlayer.hasItem('WEAPON_BATTLEAXE') then
+                cb(true)
+            else
+                cb(false)
+            end
         else
-            cb(false)
+            if xPlayer.hasWeapon('WEAPON_BATTLEAXE') then
+                cb(true)
+            else
+                cb(false)
+            end
         end
     end
 end)
@@ -90,7 +120,11 @@ RegisterServerEvent('esx-lumberjack:lumberprocessed', function()
     local TradeAmount = math.random(LumberJob.TradeAmount_Min, LumberJob.TradeAmount_Max)
     local TradeRecevied = math.random(LumberJob.TradeRecevied_Min, LumberJob.TradeRecevied_Max)
     if lumber.count < 1 then 
-        xPlayer.showNotification(Config.Alerts['error_lumber'])
+        if Config.NotificationType == "ESX" then
+            TriggerClientEvent('esx:showNotification', source, Config.Alerts['error_lumber'], "error")
+        elseif Config.NotificationType == "ox_lib" then
+            TriggerClientEvent('ox_lib:notify', source, { type = 'error', description = Config.Alerts['error_lumber'] })
+        end
         return false
     end
 
@@ -102,29 +136,19 @@ RegisterServerEvent('esx-lumberjack:lumberprocessed', function()
     end
     if lumber.count >= amount then 
         xPlayer.removeInventoryItem('tree_lumber', amount)
-        xPlayer.showNotification(Config.Alerts["lumber_processed_trade"] ..TradeAmount.. Config.Alerts["lumber_processed_lumberamount"] ..TradeRecevied.. Config.Alerts["lumber_processed_received"])
+        if Config.NotificationType == "ESX" then
+            TriggerClientEvent('esx:showNotification', source, Config.Alerts["lumber_processed_trade"] ..TradeAmount.. Config.Alerts["lumber_processed_lumberamount"] ..TradeRecevied.. Config.Alerts["lumber_processed_received"], "info")
+        elseif Config.NotificationType == "ox_lib" then
+            TriggerClientEvent('ox_lib:notify', source, { type = 'inform', description = Config.Alerts["lumber_processed_trade"] ..TradeAmount.. Config.Alerts["lumber_processed_lumberamount"] ..TradeRecevied.. Config.Alerts["lumber_processed_received"] })
+        end
         Wait(750)
         xPlayer.addInventoryItem('wood_plank', TradeRecevied)
-    else 
-        xPlayer.showNotification(Config.Alerts['itemamount'])
+    else
+        if Config.NotificationType == "ESX" then
+            TriggerClientEvent('esx:showNotification', source, Config.Alerts['itemamount'], "info")
+        elseif Config.NotificationType == "ox_lib" then
+            TriggerClientEvent('ox_lib:notify', source, { type = 'inform', description = Config.Alerts['itemamount'] })
+        end
         return false
     end
 end)
-
-AddEventHandler('onResourceStart', function(resourceName)
-    if (GetCurrentResourceName() ~= resourceName) then
-        return
-    end
-    print("-------------------------------------------------------------------------------------------------------------")
-    print("███████╗ ██████╗██╗  ██╗ ██╗     ██╗   ██╗███╗   ███╗██████╗ ███████╗██████╗      ██╗ █████╗  █████╗ ██╗  ██╗ ")
-    print("██╔═══  ██╔════╝╚██╗██╔╝ ██║     ██║   ██║████╗ ████║██╔══██╗██╔════╝██╔══██╗     ██║██╔══██╗██╔══██╗██║██╔╝ ")
-    print("█████╗  ╚█████╗  ╚███╔╝  ██║     ██║   ██║██╔████╔██║██████╦╝█████╗  ██████╔╝     ██║███████║██║  ╚═╝█████═╝ ")
-    print("██╔══╝   ╚═══██╗ ██╔██╗  ██║     ██║   ██║██║╚██╔╝██║██╔══██╗██╔══╝  ██╔══██╗██╗  ██║██╔══██║██║  ██╗██╔═██╗ ")
-    print("███████╗██████╔╝██╔╝╚██╗ ███████╗╚██████╔╝██║ ╚═╝ ██║██████╦╝███████╗██║  ██║╚█████╔╝██║  ██║╚█████╔╝██║ ╚██╗")
-    print("╚══════╝╚═════╝ ╚═╝  ╚═╝ ╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ╚════╝ ╚═╝  ╚═╝ ")
-    print("              Converted By Mycroft (Manager of ESX-Framework) & Benzo (Head Of ESX-Support)")
-    print("                               Website: https://docs.esx-framework.org")
-    print("                                TRClassic: https://dsc.gg/trclassic")
-    print("                    Original Script: https://github.com/trclassic92/tr-lumberjack")
-    print("---------------------------------------------------------------------------------------------------------------")                                                                                                                                
-  end)
