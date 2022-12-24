@@ -1,7 +1,12 @@
 Config = Config or {}
-Config.Job = true                                                  -- False = Job is not required / True = Job is required
-Config.UseBlips = true                                              -- True / false option for toggling farm blips
-Config.Timeout = 20 * (60 * 1000)                                   -- 20 minutes
+Config.Job = true -- False = Job is not required / True = Job is required
+Config.UseBlips = true -- True / false option for toggling farm blips
+Config.Timeout = 20 * (60 * 1000) -- 20 minutes
+
+-- Setting of libary
+Config.NotificationType = "ESX" -- ESX, ox_lib
+Config.UseOxLib = true -- If you use Over Extendet Lib then you change it to true from false
+Config.UseOxInventory = true -- if you user ox inventory then you change it to true from false
 
 Config.FuelSystem = function(vehicle, level)
   --  exports['LegacyFuel']:SetFuel(vehicle, level)
@@ -10,18 +15,18 @@ end
 -- Blips
 Config.Blips = {
     LumberDepo = {
-        targetZone = vector3(1167.73, -1347.27, 33.92),                 -- qb-target vector
-        targetHeading = 273.47,                                         -- qb-target box zone
-        coords = vector4(1167.73, -1347.27, 33.92, 273.47),             -- Move Location (Ped and blip)
-        SetBlipSprite = 85,                                             -- Blip Icon (https://docs.fivem.net/docs/game-references/blips/)
-        SetBlipDisplay = 6,                                             -- Blip Behavior (https://docs.fivem.net/natives/?_0x9029B2F3DA924928)
-        SetBlipScale = 0.8,                                            -- Blip Size
-        SetBlipColour = 5,                                              -- Blip Color
-        BlipLabel = "Lumber Depo",                                      -- Blip Label
-        minZ = 31.92,                                                   -- Max Z
-        maxZ = 35.92,                                                   -- Max Z
-        Vehicle = 'tiptruck',                                           -- Job Vehicle
-        VehicleCoords = vector4(1162.27, -1318.55, 34.74, 173.91),      -- Job Vehcile Coords
+        targetZone = vector3(1167.73, -1347.27, 33.92), -- qb-target vector
+        targetHeading = 273.47, -- qb-target box zone
+        coords = vector4(1167.73, -1347.27, 33.92, 273.47), -- Move Location (Ped and blip)
+        SetBlipSprite = 85, -- Blip Icon (https://docs.fivem.net/docs/game-references/blips/)
+        SetBlipDisplay = 6, -- Blip Behavior (https://docs.fivem.net/natives/?_0x9029B2F3DA924928)
+        SetBlipScale = 0.8, -- Blip Size
+        SetBlipColour = 5, -- Blip Color
+        BlipLabel = "Lumber Depo", -- Blip Label
+        minZ = 31.92, -- Max Z
+        maxZ = 35.92, -- Max Z
+        Vehicle = 'tiptruck', -- Job Vehicle
+        VehicleCoords = vector4(1162.27, -1318.55, 34.74, 173.91), -- Job Vehcile Coords
     },
     LumberProcessor = {
         targetZone = vector3(-517.13, 5331.54, 79.26),
@@ -249,50 +254,40 @@ Config.TreeLocations = {
 }
 
 Config.Alerts = {
-    cancel = 'Cancelled',
-    error_lumber = 'You do not have any lumber to do this',
-    error_axe = 'You dont have a axe to chop the tree',
-    lumber_progressbar = 'Trading lumber for wooden planks',
-    itemamount = 'You are trying to process a amount that is invalid try again!',
-    lumber_processed_trade = 'You successfully traded ',
-    lumber_processed_lumberamount = ' Amount of Lumber for ',
-    lumber_processed_received = ' Piles of wooden panks',
-    error_sold = 'You dont have the items to sell here!',
-    successfully_sold = 'You have sold your items',
-    no_item = "You dont have anything to sell",
-
-    axe_check = 'You already have a axe',
-    axe_bought = 'You have bought a axe from the boss for $' ..LumberJob.AxePrice,
-
-    phone_sender = 'Lumber Mill Supervisor',
-    phone_subject = 'Job task',
-    phone_message = 'You have been tasked to gather lumber near the paleto bay lumber mill. Once you have finished gathering lumber speak to the mill boss to process the lumber.',
-
-    chopping_tree = 'Chopping Tree',
-
-    Tree_label = 'Start Chopping',
-    depo_label = 'Talk to boss',
-    mill_label = 'Talk to mill boss',
-
-    depo_blocked = 'Vehicle blocking depo',
-    depo_stored = 'Job Vehicle Stored',
-
-    vehicle_header = 'Lumber Jack Vehicles',
-    vehicle_get = 'Logger Vehicle',
-    vehicle_text = 'Job Vehicle',
-
-    battleaxe_label = 'Lumber Axe',
-    battleaxe_text = 'Axe used for chopping down trees',
-    
-    vehicle_remove = 'Remove Vehicle',
-    remove_text = 'Remove Job Vehicle',
-
-    lumber_mill = 'Lumber Mill',
+    cancel = 'Zrušeno',
+    error_lumber = 'Nemáte žádne dřevo na tudle činnost',
+    error_axe = 'Nemáš sekeru',
+    lumber_progressbar = 'Zpracováváš na dřevěné desky',
+    itemamount = 'Pokoušíte se zpracovat částku, která je neplatná, zkuste to znovu!',
+    lumber_processed_trade = 'Úspěšně jste obchodovali ',
+    lumber_processed_lumberamount = ' Množství řeziva pro ',
+    lumber_processed_received = ' Hromady dřevěných palačinek',
+    error_sold = 'Zde nemáte zboží k prodeji!',
+    successfully_sold = 'Prodal jsi itemy',
+    no_item = "Nemáš žádný item z potřebných itemů",
+    axe_check = 'Už máš sekeru',
+    axe_bought = 'Právě sis koupil sekeru za ' ..LumberJob.AxePrice..' $',
+    phone_sender = 'Vedoucí dřevorubckého závodu',
+    phone_subject = 'Pracovní úkoly',
+    phone_message = 'Dostali jste za úkol shromaždit co nejvíce řeziva pobliž lísovny poblíž Paleto Bay. Jakmile dokončíte práci, promluvte si se šéfem dřevorubckého závodu',
+    chopping_tree = 'Sekáš strom',
+    Tree_label = 'Začít sekat strom',
+    depo_label = 'Promluvit se šéfem',
+    mill_label = 'Zpracovat dřevo',
+    depo_blocked = 'Nějaké auto ti blokuje deop',
+    depo_stored = 'Frakční vozidlo bylo vytaženo',
+    vehicle_header = '🚛 Dřevorubecké vozidlo frakční',
+    vehicle_get = '🚘 Logger Vehicle',
+    vehicle_text = '🚘 Frakční vozidlo',
+    battleaxe_label = '🪓 Sekera na dřevo',
+    battleaxe_text = '💵 Koupit sekeru na dřevo',  
+    vehicle_remove = '🗑 Odstranit frakční vozidlo',
+    remove_text = '🗑 Odstranit frakční vozidlo',
+    lumber_mill = 'Zpracování dřeva',
     lumber_header = 'Process Lumber',
-    lumber_text = 'Trade for wooden planks',
-
-    Lumber_Seller = 'Sell Lumber',
-
-    goback = '< Go Back',
-
+    lumber_text = '🐻 Zpracovat na dřevěné desky',
+    lumber_text_description = 'Čti popisek !!! ➡',
+    lumber_text_description_meta_data = 'Potřebuješ minimálně 1x Kůra Stormu a 1x Stromové Řezivo',
+    Lumber_Seller = 'Prodavač',
+    goback = '< Zpět',
 }
