@@ -1,6 +1,6 @@
 # esx-lumberjack
 
-LumberJack Script for QBCore - Converted to ESX by Mycroft (Manager of ESX-Framework)
+LumberJack Script for QBCore - Converted to ESX by Mycroft (Manager of ESX-Framework) - Updated to ox_lib and ox_inventory and new esx-legacy by: Gojan#1450
 
 ## Discord
 
